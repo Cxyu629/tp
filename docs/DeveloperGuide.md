@@ -336,7 +336,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 5. Data should be stored locally and in a human editable text file.
 6. Should work without requiring an installer.
 7. Should work without reliance on a remote server.
-8. Should only contain third-party libraries/libraries/services which are free, open-source, and have permissive license terms (if any).
+8. Should only contain third-party frameworks/libraries/services which are free, open-source, and have permissive license terms (if any).
 9. GUI should work well for standard screen resolutions 1920x1080 and higher, and for screen scales 100% and 125%.
 10. GUI should be usable for resolutions 1280x720 and higher, and for screen scales 150%.
 11. Should be packaged in a single JAR file.
