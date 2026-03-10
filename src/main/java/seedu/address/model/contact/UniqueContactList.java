@@ -12,15 +12,15 @@ import seedu.address.model.contact.exceptions.DuplicateContactException;
 import seedu.address.model.contact.exceptions.ContactNotFoundException;
 
 /**
- * A list of persons that enforces uniqueness between its elements and does not allow nulls.
- * A person is considered unique by comparing using {@code Person#isSamePerson(Person)}. As such, adding and updating of
- * persons uses Person#isSamePerson(Person) for equality so as to ensure that the person being added or updated is
- * unique in terms of identity in the UniquePersonList. However, the removal of a person uses Person#equals(Object) so
- * as to ensure that the person with exactly the same fields will be removed.
+ * A list of contacts that enforces uniqueness between its elements and does not allow nulls.
+ * A contact is considered unique by comparing using {@code Contact#isSameContact(Contact)}. As such, adding and updating of
+ * contacts uses Contact#isSameContact(Contact) for equality so as to ensure that the contact being added or updated is
+ * unique in terms of identity in the UniqueContactList. However, the removal of a contact uses Contact#equals(Object) so
+ * as to ensure that the contact with exactly the same fields will be removed.
  *
  * Supports a minimal set of list operations.
  *
- * @see Contact#isSamePerson(Contact)
+ * @see Contact#isSameContact(Contact)
  */
 public class UniqueContactList implements Iterable<Contact> {
 
@@ -29,16 +29,16 @@ public class UniqueContactList implements Iterable<Contact> {
             FXCollections.unmodifiableObservableList(internalList);
 
     /**
-     * Returns true if the list contains an equivalent person as the given argument.
+     * Returns true if the list contains an equivalent contact as the given argument.
      */
     public boolean contains(Contact toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::isSamePerson);
+        return internalList.stream().anyMatch(toCheck::isSameContact);
     }
 
     /**
-     * Adds a person to the list.
-     * The person must not already exist in the list.
+     * Adds a contact to the list.
+     * The contact must not already exist in the list.
      */
     public void add(Contact toAdd) {
         requireNonNull(toAdd);
@@ -49,28 +49,28 @@ public class UniqueContactList implements Iterable<Contact> {
     }
 
     /**
-     * Replaces the person {@code target} in the list with {@code editedPerson}.
+     * Replaces the contact {@code target} in the list with {@code editedContact}.
      * {@code target} must exist in the list.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the list.
+     * The contact identity of {@code editedContact} must not be the same as another existing contact in the list.
      */
-    public void setPerson(Contact target, Contact editedPerson) {
-        requireAllNonNull(target, editedPerson);
+    public void setContact(Contact target, Contact editedContact) {
+        requireAllNonNull(target, editedContact);
 
         int index = internalList.indexOf(target);
         if (index == -1) {
             throw new ContactNotFoundException();
         }
 
-        if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
+        if (!target.isSameContact(editedContact) && contains(editedContact)) {
             throw new DuplicateContactException();
         }
 
-        internalList.set(index, editedPerson);
+        internalList.set(index, editedContact);
     }
 
     /**
-     * Removes the equivalent person from the list.
-     * The person must exist in the list.
+     * Removes the equivalent contact from the list.
+     * The contact must exist in the list.
      */
     public void remove(Contact toRemove) {
         requireNonNull(toRemove);
@@ -79,22 +79,22 @@ public class UniqueContactList implements Iterable<Contact> {
         }
     }
 
-    public void setPersons(UniqueContactList replacement) {
+    public void setContacts(UniqueContactList replacement) {
         requireNonNull(replacement);
         internalList.setAll(replacement.internalList);
     }
 
     /**
-     * Replaces the contents of this list with {@code persons}.
-     * {@code persons} must not contain duplicate persons.
+     * Replaces the contents of this list with {@code contacts}.
+     * {@code contacts} must not contain duplicate contacts.
      */
-    public void setPersons(List<Contact> persons) {
-        requireAllNonNull(persons);
-        if (!personsAreUnique(persons)) {
+    public void setContacts(List<Contact> contacts) {
+        requireAllNonNull(contacts);
+        if (!contactsAreUnique(contacts)) {
             throw new DuplicateContactException();
         }
 
-        internalList.setAll(persons);
+        internalList.setAll(contacts);
     }
 
     /**
@@ -120,8 +120,8 @@ public class UniqueContactList implements Iterable<Contact> {
             return false;
         }
 
-        UniqueContactList otherUniquePersonList = (UniqueContactList) other;
-        return internalList.equals(otherUniquePersonList.internalList);
+        UniqueContactList otherUniqueContactList = (UniqueContactList) other;
+        return internalList.equals(otherUniqueContactList.internalList);
     }
 
     @Override
@@ -135,12 +135,12 @@ public class UniqueContactList implements Iterable<Contact> {
     }
 
     /**
-     * Returns true if {@code persons} contains only unique persons.
+     * Returns true if {@code contacts} contains only unique contacts.
      */
-    private boolean personsAreUnique(List<Contact> persons) {
-        for (int i = 0; i < persons.size() - 1; i++) {
-            for (int j = i + 1; j < persons.size(); j++) {
-                if (persons.get(i).isSamePerson(persons.get(j))) {
+    private boolean contactsAreUnique(List<Contact> contacts) {
+        for (int i = 0; i < contacts.size() - 1; i++) {
+            for (int j = i + 1; j < contacts.size(); j++) {
+                if (contacts.get(i).isSameContact(contacts.get(j))) {
                     return false;
                 }
             }

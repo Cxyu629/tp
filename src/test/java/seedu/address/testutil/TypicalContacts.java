@@ -19,7 +19,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.contact.Contact;
 
 /**
- * A utility class containing a list of {@code Person} objects to be used in tests.
+ * A utility class containing a list of {@code Contact} objects to be used in tests.
  */
 public class TypicalContacts {
 
@@ -48,7 +48,7 @@ public class TypicalContacts {
     public static final Contact IDA = new ContactBuilder().withName("Ida Mueller").withPhone("8482131")
             .withEmail("hans@example.com").withAddress("chicago ave").build();
 
-    // Manually added - Person's details found in {@code CommandTestUtil}
+    // Manually added - Contact's details found in {@code CommandTestUtil}
     public static final Contact AMY = new ContactBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
             .withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY).withTags(VALID_TAG_FRIEND).build();
     public static final Contact BOB = new ContactBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
@@ -60,17 +60,17 @@ public class TypicalContacts {
     private TypicalContacts() {} // prevents instantiation
 
     /**
-     * Returns an {@code AddressBook} with all the typical persons.
+     * Returns an {@code AddressBook} with all the typical contacts.
      */
     public static AddressBook getTypicalAddressBook() {
         AddressBook ab = new AddressBook();
-        for (Contact person : getTypicalPersons()) {
-            ab.addPerson(person);
+        for (Contact contact : getTypicalContacts()) {
+            ab.addContact(contact);
         }
         return ab;
     }
 
-    public static List<Contact> getTypicalPersons() {
+    public static List<Contact> getTypicalContacts() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
     }
 }

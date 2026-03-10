@@ -27,22 +27,22 @@ public class AddCommandIntegrationTest {
     }
 
     @Test
-    public void execute_newPerson_success() {
-        Contact validPerson = new ContactBuilder().build();
+    public void execute_newContact_success() {
+        Contact validContact = new ContactBuilder().build();
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.addPerson(validPerson);
+        expectedModel.addContact(validContact);
 
-        assertCommandSuccess(new AddCommand(validPerson), model,
-                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
+        assertCommandSuccess(new AddCommand(validContact), model,
+                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validContact)),
                 expectedModel);
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() {
-        Contact personInList = model.getAddressBook().getPersonList().get(0);
-        assertCommandFailure(new AddCommand(personInList), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+    public void execute_duplicateContact_throwsCommandException() {
+        Contact contactInList = model.getAddressBook().getContactList().get(0);
+        assertCommandFailure(new AddCommand(contactInList), model,
+                AddCommand.MESSAGE_DUPLICATE_CONTACT);
     }
 
 }

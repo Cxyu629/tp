@@ -11,7 +11,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
- * Represents a Person in the address book.
+ * Represents a Contact in the address book.
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
 public class Contact {
@@ -62,21 +62,21 @@ public class Contact {
     }
 
     /**
-     * Returns true if both persons have the same name.
-     * This defines a weaker notion of equality between two persons.
+     * Returns true if both contacts have the same name.
+     * This defines a weaker notion of equality between two contacts.
      */
-    public boolean isSamePerson(Contact otherPerson) {
-        if (otherPerson == this) {
+    public boolean isSameContact(Contact otherContact) {
+        if (otherContact == this) {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName());
+        return otherContact != null
+                && otherContact.getName().equals(getName());
     }
 
     /**
-     * Returns true if both persons have the same identity and data fields.
-     * This defines a stronger notion of equality between two persons.
+     * Returns true if both contacts have the same identity and data fields.
+     * This defines a stronger notion of equality between two contacts.
      */
     @Override
     public boolean equals(Object other) {
@@ -89,12 +89,12 @@ public class Contact {
             return false;
         }
 
-        Contact otherPerson = (Contact) other;
-        return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
-                && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+        Contact otherContact = (Contact) other;
+        return name.equals(otherContact.name)
+                && phone.equals(otherContact.phone)
+                && email.equals(otherContact.email)
+                && address.equals(otherContact.address)
+                && tags.equals(otherContact.tags);
     }
 
     @Override

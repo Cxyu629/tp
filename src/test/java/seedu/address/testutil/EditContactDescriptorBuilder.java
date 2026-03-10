@@ -13,7 +13,7 @@ import seedu.address.model.contact.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
- * A utility class to help with building EditPersonDescriptor objects.
+ * A utility class to help with building EditContactDescriptor objects.
  */
 public class EditContactDescriptorBuilder {
 
@@ -28,19 +28,19 @@ public class EditContactDescriptorBuilder {
     }
 
     /**
-     * Returns an {@code EditPersonDescriptor} with fields containing {@code person}'s details
+     * Returns an {@code EditContactDescriptor} with fields containing {@code contact}'s details
      */
-    public EditContactDescriptorBuilder(Contact person) {
+    public EditContactDescriptorBuilder(Contact contact) {
         descriptor = new EditContactDescriptor();
-        descriptor.setName(person.getName());
-        descriptor.setPhone(person.getPhone());
-        descriptor.setEmail(person.getEmail());
-        descriptor.setAddress(person.getAddress());
-        descriptor.setTags(person.getTags());
+        descriptor.setName(contact.getName());
+        descriptor.setPhone(contact.getPhone());
+        descriptor.setEmail(contact.getEmail());
+        descriptor.setAddress(contact.getAddress());
+        descriptor.setTags(contact.getTags());
     }
 
     /**
-     * Sets the {@code Name} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Name} of the {@code EditContactDescriptor} that we are building.
      */
     public EditContactDescriptorBuilder withName(String name) {
         descriptor.setName(new Name(name));
@@ -48,7 +48,7 @@ public class EditContactDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Phone} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Phone} of the {@code EditContactDescriptor} that we are building.
      */
     public EditContactDescriptorBuilder withPhone(String phone) {
         descriptor.setPhone(new Phone(phone));
@@ -56,7 +56,7 @@ public class EditContactDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Email} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Email} of the {@code EditContactDescriptor} that we are building.
      */
     public EditContactDescriptorBuilder withEmail(String email) {
         descriptor.setEmail(new Email(email));
@@ -64,7 +64,7 @@ public class EditContactDescriptorBuilder {
     }
 
     /**
-     * Sets the {@code Address} of the {@code EditPersonDescriptor} that we are building.
+     * Sets the {@code Address} of the {@code EditContactDescriptor} that we are building.
      */
     public EditContactDescriptorBuilder withAddress(String address) {
         descriptor.setAddress(new Address(address));
@@ -72,7 +72,7 @@ public class EditContactDescriptorBuilder {
     }
 
     /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditPersonDescriptor}
+     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditContactDescriptor}
      * that we are building.
      */
     public EditContactDescriptorBuilder withTags(String... tags) {

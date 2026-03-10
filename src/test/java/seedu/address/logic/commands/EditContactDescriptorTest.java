@@ -59,13 +59,13 @@ public class EditContactDescriptorTest {
 
     @Test
     public void toStringMethod() {
-        EditContactDescriptor editPersonDescriptor = new EditContactDescriptor();
+        EditContactDescriptor editContactDescriptor = new EditContactDescriptor();
         String expected = EditContactDescriptor.class.getCanonicalName() + "{name="
-                + editPersonDescriptor.getName().orElse(null) + ", phone="
-                + editPersonDescriptor.getPhone().orElse(null) + ", email="
-                + editPersonDescriptor.getEmail().orElse(null) + ", address="
-                + editPersonDescriptor.getAddress().orElse(null) + ", tags="
-                + editPersonDescriptor.getTags().orElse(null) + "}";
-        assertEquals(expected, editPersonDescriptor.toString());
+                + editContactDescriptor.getName().orElse(null) + ", phone="
+                + editContactDescriptor.getPhone().orElse(null) + ", email="
+                + editContactDescriptor.getEmail().orElse(null) + ", address="
+                + editContactDescriptor.getAddress().orElse(null) + ", tags="
+                + editContactDescriptor.getTags().orElse(null) + "}";
+        assertEquals(expected, editContactDescriptor.toString());
     }
 }

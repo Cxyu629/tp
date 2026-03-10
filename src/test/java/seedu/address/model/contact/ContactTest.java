@@ -21,35 +21,35 @@ public class ContactTest {
 
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
-        Contact person = new ContactBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> person.getTags().remove(0));
+        Contact contact = new ContactBuilder().build();
+        assertThrows(UnsupportedOperationException.class, () -> contact.getTags().remove(0));
     }
 
     @Test
-    public void isSamePerson() {
+    public void isSameContact() {
         // same object -> returns true
-        assertTrue(ALICE.isSamePerson(ALICE));
+        assertTrue(ALICE.isSameContact(ALICE));
 
         // null -> returns false
-        assertFalse(ALICE.isSamePerson(null));
+        assertFalse(ALICE.isSameContact(null));
 
         // same name, all other attributes different -> returns true
         Contact editedAlice = new ContactBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
+        assertTrue(ALICE.isSameContact(editedAlice));
 
         // different name, all other attributes same -> returns false
         editedAlice = new ContactBuilder(ALICE).withName(VALID_NAME_BOB).build();
-        assertFalse(ALICE.isSamePerson(editedAlice));
+        assertFalse(ALICE.isSameContact(editedAlice));
 
         // name differs in case, all other attributes same -> returns false
         Contact editedBob = new ContactBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertFalse(BOB.isSameContact(editedBob));
 
         // name has trailing spaces, all other attributes same -> returns false
         String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
         editedBob = new ContactBuilder(BOB).withName(nameWithTrailingSpaces).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertFalse(BOB.isSameContact(editedBob));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ContactTest {
         // different type -> returns false
         assertFalse(ALICE.equals(5));
 
-        // different person -> returns false
+        // different contact -> returns false
         assertFalse(ALICE.equals(BOB));
 
         // different name -> returns false
