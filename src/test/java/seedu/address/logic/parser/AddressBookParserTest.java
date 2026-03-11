@@ -26,7 +26,6 @@ import seedu.address.logic.commands.NotesCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.contact.Contact;
 import seedu.address.model.contact.NameAndTagContainsKeywordsPredicate;
-import seedu.address.model.contact.NameContainsKeywordsPredicate;
 import seedu.address.model.contact.Notes;
 import seedu.address.testutil.ContactBuilder;
 import seedu.address.testutil.ContactUtil;
