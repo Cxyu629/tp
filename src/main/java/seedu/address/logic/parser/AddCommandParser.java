@@ -17,6 +17,7 @@ import seedu.address.model.contact.Address;
 import seedu.address.model.contact.Contact;
 import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
+import seedu.address.model.contact.Notes;
 import seedu.address.model.contact.Phone;
 import seedu.address.model.tag.Tag;
 
@@ -52,9 +53,10 @@ public class AddCommandParser implements Parser<AddCommand> {
                 : Optional.empty();
         Optional<Address> address = addressValue.isPresent() ? Optional.of(ParserUtil.parseAddress(addressValue.get()))
                 : Optional.empty();
+        Notes notes = new Notes("");
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Contact contact = new Contact(name, phone, email, address, tagList);
+        Contact contact = new Contact(name, phone, email, address, notes, tagList);
 
         return new AddCommand(contact);
     }

@@ -39,6 +39,8 @@ public class ContactCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label notes;
+    @FXML
     private FlowPane tags;
 
     /**
@@ -49,11 +51,24 @@ public class ContactCard extends UiPart<Region> {
         this.contact = contact;
         id.setText(displayedIndex + ". ");
         name.setText(contact.getName().fullName);
+        name.getParent().getParent().setStyle("-fx-background-color: #3c3e3f");
         phone.setText(contact.getPhone().map(phone -> phone.value).orElse(""));
         address.setText(contact.getAddress().map(address -> address.value).orElse(""));
         email.setText(contact.getEmail().map(email -> email.value).orElse(""));
-        contact.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        if (!contact.getNotes().value.isEmpty()) {
+            notes.setText(contact.getNotes().value);
+            notes.getParent().setStyle("-fx-background-color: #000000");
+        } else {
+            notes.getParent().setVisible(false);
+            notes.getParent().setManaged(false);
+        }
+        if (!contact.getTags().isEmpty()) {
+            contact.getTags().stream()
+                    .sorted(Comparator.comparing(tag -> tag.tagName))
+                    .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        } else {
+            tags.setVisible(false);
+            tags.setManaged(false);
+        }
     }
 }
