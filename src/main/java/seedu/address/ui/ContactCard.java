@@ -52,9 +52,9 @@ public class ContactCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         name.setText(contact.getName().fullName);
         name.getParent().getParent().setStyle("-fx-background-color: #3c3e3f");
-        phone.setText(contact.getPhone().value);
-        address.setText(contact.getAddress().value);
-        email.setText(contact.getEmail().value);
+        phone.setText(contact.getPhone().map(phone -> phone.value).orElse(""));
+        address.setText(contact.getAddress().map(address -> address.value).orElse(""));
+        email.setText(contact.getEmail().map(email -> email.value).orElse(""));
         if (!contact.getNotes().value.isEmpty()) {
             notes.setText(contact.getNotes().value);
             notes.getParent().setStyle("-fx-background-color: #000000");
@@ -63,9 +63,9 @@ public class ContactCard extends UiPart<Region> {
             notes.getParent().setManaged(false);
         }
         if (!contact.getTags().isEmpty()) {
-            contact.getTags().stream()
-                    .sorted(Comparator.comparing(tag -> tag.tagName))
-                    .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+          contact.getTags().stream()
+                  .sorted(Comparator.comparing(tag -> tag.tagName))
+                  .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         } else {
             tags.setManaged(false);
         }

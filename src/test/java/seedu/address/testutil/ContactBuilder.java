@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.contact.Address;
@@ -24,9 +25,9 @@ public class ContactBuilder {
     public static final String DEFAULT_NOTES = "She likes something";
 
     private Name name;
-    private Phone phone;
-    private Email email;
-    private Address address;
+    private Optional<Phone> phone;
+    private Optional<Email> email;
+    private Optional<Address> address;
     private Notes notes;
     private Set<Tag> tags;
 
@@ -35,9 +36,9 @@ public class ContactBuilder {
      */
     public ContactBuilder() {
         name = new Name(DEFAULT_NAME);
-        phone = new Phone(DEFAULT_PHONE);
-        email = new Email(DEFAULT_EMAIL);
-        address = new Address(DEFAULT_ADDRESS);
+        phone = Optional.of(new Phone(DEFAULT_PHONE));
+        email = Optional.of(new Email(DEFAULT_EMAIL));
+        address = Optional.of(new Address(DEFAULT_ADDRESS));
         notes = new Notes(DEFAULT_NOTES);
         tags = new HashSet<>();
     }
@@ -74,7 +75,7 @@ public class ContactBuilder {
      * Sets the {@code Address} of the {@code Contact} that we are building.
      */
     public ContactBuilder withAddress(String address) {
-        this.address = new Address(address);
+        this.address = Optional.of(new Address(address));
         return this;
     }
 
@@ -82,7 +83,7 @@ public class ContactBuilder {
      * Sets the {@code Phone} of the {@code Contact} that we are building.
      */
     public ContactBuilder withPhone(String phone) {
-        this.phone = new Phone(phone);
+        this.phone = Optional.of(new Phone(phone));
         return this;
     }
 
@@ -90,7 +91,7 @@ public class ContactBuilder {
      * Sets the {@code Email} of the {@code Contact} that we are building.
      */
     public ContactBuilder withEmail(String email) {
-        this.email = new Email(email);
+        this.email = Optional.of(new Email(email));
         return this;
     }
 

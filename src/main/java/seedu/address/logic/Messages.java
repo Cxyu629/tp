@@ -36,14 +36,11 @@ public class Messages {
      */
     public static String format(Contact contact) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(contact.getName())
-                .append("; Phone: ")
-                .append(contact.getPhone())
-                .append("; Email: ")
-                .append(contact.getEmail())
-                .append("; Address: ")
-                .append(contact.getAddress())
-                .append("; Tags: ");
+        builder.append(contact.getName());
+        contact.getPhone().ifPresent((phone) -> builder.append("; Phone: ").append(phone));
+        contact.getEmail().ifPresent((email) -> builder.append("; Email: ").append(email));
+        contact.getAddress().ifPresent((address) -> builder.append("; Address: ").append(address));
+        builder.append("; Tags: ");
         contact.getTags().forEach(builder::append);
         return builder.toString();
     }

@@ -33,9 +33,9 @@ public class EditContactDescriptorBuilder {
     public EditContactDescriptorBuilder(Contact contact) {
         descriptor = new EditContactDescriptor();
         descriptor.setName(contact.getName());
-        descriptor.setPhone(contact.getPhone());
-        descriptor.setEmail(contact.getEmail());
-        descriptor.setAddress(contact.getAddress());
+        contact.getPhone().ifPresent(descriptor::setPhone);
+        contact.getEmail().ifPresent(descriptor::setEmail);
+        contact.getAddress().ifPresent(descriptor::setAddress);
         descriptor.setTags(contact.getTags());
     }
 

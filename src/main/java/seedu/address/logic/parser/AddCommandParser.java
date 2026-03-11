@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -40,10 +41,18 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
+
+        Optional<String> phoneValue = argMultimap.getValue(PREFIX_PHONE);
+        Optional<String> emailValue = argMultimap.getValue(PREFIX_EMAIL);
+        Optional<String> addressValue = argMultimap.getValue(PREFIX_ADDRESS);
+
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
-        Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
+        Optional<Phone> phone = phoneValue.isPresent() ? Optional.of(ParserUtil.parsePhone(phoneValue.get()))
+                : Optional.empty();
+        Optional<Email> email = emailValue.isPresent() ? Optional.of(ParserUtil.parseEmail(emailValue.get()))
+                : Optional.empty();
+        Optional<Address> address = addressValue.isPresent() ? Optional.of(ParserUtil.parseAddress(addressValue.get()))
+                : Optional.empty();
         Notes notes = new Notes("");
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
