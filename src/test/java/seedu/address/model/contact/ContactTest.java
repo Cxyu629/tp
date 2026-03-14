@@ -68,6 +68,7 @@ public class ContactTest {
 
     @Test
     public void containsInNameTest() {
+        assertTrue(JOHN.containsInName(""));
         assertTrue(JOHN.containsInName("John"));
         assertTrue(JOHN.containsInName("JO"));
         assertTrue(JOHN.containsInName("smit"));
@@ -76,6 +77,7 @@ public class ContactTest {
 
     @Test
     public void containsInPhoneTest() {
+        assertTrue(JOHN.containsInPhone(""));
         assertTrue(JOHN.containsInPhone("9445"));
         assertTrue(JOHN.containsInPhone("45"));
         assertTrue(JOHN.containsInPhone("028"));
@@ -84,6 +86,7 @@ public class ContactTest {
 
     @Test
     public void containsInAddressTest() {
+        assertTrue(JOHN.containsInAddress(""));
         assertTrue(JOHN.containsInAddress("Block"));
         assertTrue(JOHN.containsInAddress("street"));
         assertTrue(JOHN.containsInAddress("92"));
@@ -92,6 +95,7 @@ public class ContactTest {
 
     @Test
     public void containsInEmailTest() {
+        assertTrue(JOHN.containsInEmail(""));
         assertTrue(JOHN.containsInEmail("john"));
         assertTrue(JOHN.containsInEmail("email"));
         assertTrue(JOHN.containsInEmail("com"));
@@ -100,6 +104,7 @@ public class ContactTest {
 
     @Test
     public void containsInTagsTest() {
+        assertTrue(JOHN.containsInTags(""));
         assertTrue(JOHN.containsInTags("FRIENd"));
         assertTrue(JOHN.containsInTags("friends"));
         assertTrue(JOHN.containsInTags("contractor"));
@@ -108,6 +113,7 @@ public class ContactTest {
 
     @Test
     public void hasTagTest() {
+        assertFalse(JOHN.hasTag(""));
         assertFalse(JOHN.hasTag("FRIENd"));
         assertTrue(JOHN.hasTag("FRIENDS"));
         assertTrue(JOHN.hasTag("contractor"));

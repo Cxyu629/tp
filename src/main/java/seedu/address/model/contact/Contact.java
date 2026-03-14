@@ -160,9 +160,6 @@ public class Contact {
      * @param string {@code String} to check against this contact.
      */
     public boolean hasTag(String string) {
-        if (string.isEmpty()) {
-            return true;
-        }
         return tags.stream().anyMatch(
                 tag -> tag.tagName.toLowerCase(Locale.ROOT).equals(string.toLowerCase(Locale.ROOT)));
     }
