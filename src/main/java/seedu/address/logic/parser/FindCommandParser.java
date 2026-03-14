@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.contact.ContactMatchesKeywordsPredicate;
+import seedu.address.model.contact.ConjunctiveContactPredicateSet;
+import seedu.address.model.contact.Contact;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -37,32 +38,30 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
-
-        List<String> nameKeywords = argMultimap.getValue(PREFIX_NAME)
-                .map(this::splitKeywords)
-                .orElse(List.of());
-        List<String> phoneKeywords = argMultimap.getValue(PREFIX_PHONE)
-                .map(this::splitKeywords)
-                .orElse(List.of());
-        List<String> emailKeywords = argMultimap.getValue(PREFIX_EMAIL)
-                .map(this::splitKeywords)
-                .orElse(List.of());
-        List<String> addressKeywords = argMultimap.getValue(PREFIX_ADDRESS)
-                .map(this::splitKeywords)
-                .orElse(List.of());
-        List<String> tagKeywords = splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_TAG)));
-
-        if (nameKeywords.isEmpty() && phoneKeywords.isEmpty() && emailKeywords.isEmpty()
-                && addressKeywords.isEmpty() && tagKeywords.isEmpty()) {
+        if (argMultimap.getPreamble().isEmpty()
+                && argMultimap.getAllValues(PREFIX_NAME).isEmpty()
+                && argMultimap.getAllValues(PREFIX_PHONE).isEmpty()
+                && argMultimap.getAllValues(PREFIX_EMAIL).isEmpty()
+                && argMultimap.getAllValues(PREFIX_ADDRESS).isEmpty()
+                && argMultimap.getAllValues(PREFIX_TAG).isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        return new FindCommand(new ContactMatchesKeywordsPredicate(
-                nameKeywords, phoneKeywords, emailKeywords, addressKeywords, tagKeywords));
+        ConjunctiveContactPredicateSet cumulativePredicate = new ConjunctiveContactPredicateSet();
+        splitKeywords(argMultimap.getPreamble()).forEach(
+                        keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.contains(keyword)));
+        splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_NAME))).forEach(
+                keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.containsInName(keyword)));
+        splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_PHONE))).forEach(
+                keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.containsInPhone(keyword)));
+        splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_EMAIL))).forEach(
+                keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.containsInEmail(keyword)));
+        splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_ADDRESS))).forEach(
+                keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.containsInAddress(keyword)));
+        splitKeywords(String.join(" ", argMultimap.getAllValues(PREFIX_TAG))).forEach(
+                keyword -> cumulativePredicate.addPredicate((Contact contact) -> contact.hasTag(keyword)));
+
+        return new FindCommand(cumulativePredicate);
     }
 
     /**
