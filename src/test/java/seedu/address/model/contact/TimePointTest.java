@@ -26,6 +26,10 @@ public class TimePointTest {
         TimePoint t9 = TimePoint.of("2024 Oct 10");
         TimePoint t10 = TimePoint.of(LocalDate.of(2024, 10, 10));
         assertFalse(t9.isSameDayAs(t10));
+        assertFalse(t10.isSameDayAs(t9));
+        assertFalse(t9.isSameDayAs(t8));
+        assertFalse(t9.isSameDayAs(t5));
+        assertFalse(t5.isSameDayAs(t9));
     }
 
     @Test
@@ -71,10 +75,15 @@ public class TimePointTest {
     public void equalsTests() {
         TimePoint t1 = TimePoint.of(LocalDate.of(2024, 1, 1));
         assertTrue(t1.equals(t1));
+        assertFalse(t1.equals(null));
+        assertFalse(t1.equals(1.5));
         TimePoint t2 = TimePoint.of(LocalDate.of(2024, 1, 1));
         assertFalse(t2.equals(null));
         TimePoint t3 = TimePoint.of(LocalDate.of(2024, 1, 1));
         assertFalse(t3.equals("2024-01-01"));
+        assertTrue(t3.equals(t3));
+        assertFalse(t3.equals(null));
+        assertFalse(t3.equals(1.5));
         TimePoint t4 = TimePoint.of(LocalDate.of(2024, 1, 1));
         TimePoint t5 = TimePoint.of(LocalDate.of(2024, 1, 1));
         assertTrue(t4.equals(t5));
@@ -90,6 +99,9 @@ public class TimePointTest {
         TimePoint t12 = TimePoint.of("Oct 10");
         TimePoint t13 = TimePoint.of("Oct 10");
         assertTrue(t12.equals(t13));
+        assertTrue(t12.equals(t12));
+        assertFalse(t12.equals(null));
+        assertFalse(t12.equals(1.5));
         TimePoint t14 = TimePoint.of("Oct 10");
         TimePoint t15 = TimePoint.of("Oct 11");
         assertFalse(t14.equals(t15));

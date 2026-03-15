@@ -41,6 +41,16 @@ public class ReminderCommandParserTest {
     }
 
     @Test
+    public void parse_notelessReminderAddCommand_success() {
+        ReminderAddCommand expectedReminderAddCommand =
+                new ReminderAddCommand(INDEX_FIRST_CONTACT, new Reminder("", TIME_POINT));
+        assertParseSuccess(
+                parser,
+                "1 " + PREFIX_ON + TIME_STRING,
+                expectedReminderAddCommand);
+    }
+
+    @Test
     public void parse_reminderRemoveCommand_success() {
         ReminderRemoveCommand expectedReminderRemoveCommand =
                 new ReminderRemoveCommand(INDEX_FIRST_CONTACT, NUM_REMINDERS);

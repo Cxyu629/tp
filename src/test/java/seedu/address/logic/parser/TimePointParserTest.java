@@ -62,8 +62,11 @@ public class TimePointParserTest {
 
     @Test
     public void fourWordDateTests() {
-        // existing
         assertEquals(LocalDateTime.of(2027, 10, 12, 3, 0), toTimePoint("2027 Oct 12 3AM").getTime());
+        assertEquals(LocalDateTime.of(2027, 10, 12, 3, 30), toTimePoint("2027 Oct 12 3:30AM").getTime());
+        assertEquals(LocalDateTime.of(2027, 10, 12, 3, 15), toTimePoint("2027 Oct 12 3:15AM").getTime());
+        assertEquals(LocalDateTime.of(2027, 10, 12, 18, 0), toTimePoint("2027 Oct 12 6PM").getTime());
+        assertEquals(LocalDateTime.of(2027, 10, 12, 18, 27), toTimePoint("2027 Oct 12 6:27PM").getTime());
         assertEquals(LocalDateTime.of(2030, 1, 1, 0, 0), toTimePoint("2030 Jan 01 12AM").getTime());
         assertEquals(LocalDateTime.of(1995, 12, 31, 23, 59), toTimePoint("1995 Dec 31 23:59").getTime());
         assertEquals("abcd ef gh ij", toTimePoint("abcd ef gh ij").getTime());
