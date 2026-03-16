@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -86,8 +87,19 @@ public interface Model {
     ObservableList<Contact> getDisplayedContactList();
 
     /**
+     * Resets the displayed contact list to show all contacts in the address book order.
+     */
+    void resetDisplayedContactList();
+
+    /**
      * Updates the filter of the displayed contact list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */
     void filterDisplayedContactList(Predicate<Contact> predicate);
+
+    /**
+     * Updates the order of the displayed contact list to sort by the given {@code comparator}.
+     * @throws NullPointerException if {@code comparator} is null.
+     */
+    void sortDisplayedContactList(Comparator<Contact> comparator);
 }

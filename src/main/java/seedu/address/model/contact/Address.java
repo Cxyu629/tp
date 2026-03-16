@@ -62,4 +62,8 @@ public class Address implements Comparable<Address> {
         return value.hashCode();
     }
 
+    @Override
+    public int compareTo(Address o) {
+        return this.value.compareToIgnoreCase(o.value);
+    }
 }

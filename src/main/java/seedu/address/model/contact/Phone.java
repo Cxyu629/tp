@@ -58,4 +58,8 @@ public class Phone implements Comparable<Phone> {
         return value.hashCode();
     }
 
+    @Override
+    public int compareTo(Phone o) {
+        return this.value.compareToIgnoreCase(o.value);
+    }
 }

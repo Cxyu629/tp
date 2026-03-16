@@ -4,11 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.contact.Contact;
@@ -21,7 +23,8 @@ public class ModelManager implements Model {
 
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Contact> displayedContacts;
+    private final ObservableList<Contact> masterContacts;
+    private ObservableList<Contact> displayedContacts;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -33,7 +36,8 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        displayedContacts = new FilteredList<>(this.addressBook.getContactList());
+        this.masterContacts = this.addressBook.getContactList();
+        this.displayedContacts = this.masterContacts;
     }
 
     public ModelManager() {
@@ -129,9 +133,26 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void resetDisplayedContactList() {
+        displayedContacts = masterContacts;
+    }
+
+    @Override
     public void filterDisplayedContactList(Predicate<Contact> predicate) {
         requireNonNull(predicate);
-        displayedContacts.setPredicate(predicate);
+
+        final FilteredList<Contact> filteredContacts = new FilteredList<>(displayedContacts);
+        filteredContacts.setPredicate(predicate);
+        displayedContacts = filteredContacts;
+    }
+
+    @Override
+    public void sortDisplayedContactList(Comparator<Contact> comparator) {
+        requireNonNull(comparator);
+
+        final SortedList<Contact> sortedContacts = new SortedList<>(displayedContacts);
+        sortedContacts.setComparator(comparator);
+        displayedContacts = sortedContacts;
     }
 
     @Override

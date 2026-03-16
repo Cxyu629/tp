@@ -82,4 +82,9 @@ public class Email implements Comparable<Email>{
         return value.hashCode();
     }
 
+    @Override
+    public int compareTo(Email o) {
+        return this.value.compareToIgnoreCase(o.value);
+    }
+
 }

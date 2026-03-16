@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_CONTACTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class NoteAddCommand extends NoteCommand {
                 contactToEdit.getAddress(), newNotes, contactToEdit.getTags());
 
         model.setContact(contactToEdit, editedContact);
-        model.filterDisplayedContactList(PREDICATE_SHOW_ALL_CONTACTS);
+        model.resetDisplayedContactList();
 
         return new CommandResult(generateSuccessMessage(editedContact));
     }

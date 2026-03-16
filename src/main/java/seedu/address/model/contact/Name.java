@@ -64,4 +64,9 @@ public class Name implements Comparable<Name> {
         return fullName.hashCode();
     }
 
+    @Override
+    public int compareTo(Name o) {
+        return this.fullName.compareToIgnoreCase(o.fullName);
+    }
+
 }
