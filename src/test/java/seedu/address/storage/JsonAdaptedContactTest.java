@@ -14,9 +14,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.contact.Address;
+import seedu.address.model.contact.Contact;
 import seedu.address.model.contact.Email;
+import seedu.address.model.contact.LastContacted;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Phone;
+import seedu.address.testutil.ContactBuilder;
 
 public class JsonAdaptedContactTest {
     private static final String INVALID_NAME = "R@chel";
@@ -49,6 +52,59 @@ public class JsonAdaptedContactTest {
                 new JsonAdaptedContact(
                         VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
                         "", VALID_TAGS);
+        assertEquals(BENSON, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_legacyNonEmptyStringNotes_returnsContactWithSingleNote() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
+                        "legacy-note", VALID_TAGS);
+        Contact expectedContact = new ContactBuilder(BENSON).withNotes("legacy-note").build();
+        assertEquals(expectedContact, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_nullNotes_returnsContactWithEmptyNotes() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
+                        null, VALID_TAGS);
+        Contact expectedContact = new ContactBuilder(BENSON).withNotes().build();
+        assertEquals(expectedContact, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_listNotesWithNullElement_ignoresNullNote() throws Exception {
+        List<String> notesWithNull = new ArrayList<>();
+        notesWithNull.add("keep");
+        notesWithNull.add(null);
+
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
+                        notesWithNull, VALID_TAGS);
+        Contact expectedContact = new ContactBuilder(BENSON).withNotes("keep").build();
+        assertEquals(expectedContact, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_nullTags_returnsContactWithNoTags() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
+                        VALID_NOTES, null);
+        Contact expectedContact = new ContactBuilder(BENSON).withTags().build();
+        assertEquals(expectedContact, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_nullLastContacted_returnsContactWithoutLastContacted() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, null,
+                        VALID_NOTES, VALID_TAGS);
         assertEquals(BENSON, contact.toModelType());
     }
 
@@ -141,5 +197,14 @@ public class JsonAdaptedContactTest {
                         VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_LAST_CONTACTED,
                         VALID_NOTES, invalidTags);
         assertThrows(IllegalValueException.class, contact::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidLastContacted_throwsIllegalValueException() {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, Optional.of(" "),
+                        VALID_NOTES, VALID_TAGS);
+        assertThrows(IllegalValueException.class, LastContacted.MESSAGE_CONSTRAINTS, contact::toModelType);
     }
 }
