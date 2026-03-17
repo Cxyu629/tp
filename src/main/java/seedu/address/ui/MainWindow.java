@@ -235,11 +235,25 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Returns the UUID of the currently viewed contact, for testing.
+     */
+    UUID getViewedContactId() {
+        return viewedContactId;
+    }
+
+    /**
+     * Sets the UUID of the currently viewed contact, for testing.
+     */
+    void setViewedContactId(UUID id) {
+        this.viewedContactId = id;
+    }
+
+    /**
      * Executes the command and returns the result.
      *
      * @see seedu.address.logic.Logic#execute(String)
      */
-    private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
+    CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
