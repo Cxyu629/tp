@@ -11,8 +11,8 @@ public class RankedTagTest {
     private static final String INVALID_TAG_VALUE = "#";
     private static final String VALID_TAG_NAME = "friend";
     private static final String VALID_TAG_VALUE = "best";
-    private static final RankedTag SAMPLE_TAG_1 = new RankedTag("friend", "1");
-    private static final RankedTag SAMPLE_TAG_2 = new RankedTag("friend", "2");
+    private static final RankedTag SAMPLE_TAG_1 = new RankedTag("friend", "best");
+    private static final RankedTag SAMPLE_TAG_2 = new RankedTag("friend", "normal");
 
     @Test
     public void constructor_null_throwsNullPointerException() {
@@ -52,4 +52,13 @@ public class RankedTagTest {
         assertEquals(false, SAMPLE_TAG_1.equals(SAMPLE_TAG_2));
     }
 
+    @Test
+    public void hashCode_is_valid() {
+        assertEquals((VALID_TAG_NAME + ':' + VALID_TAG_VALUE).hashCode(), SAMPLE_TAG_1.hashCode());
+    }
+
+    @Test
+    public void toString_is_valid() {
+        assertEquals('[' + VALID_TAG_NAME + ':' + VALID_TAG_VALUE + ']', SAMPLE_TAG_1.toString());
+    }
 }
