@@ -210,4 +210,33 @@ public class ContactDetailPanelTest extends GuiUnitTest {
             });
         });
     }
+
+    @Test
+    public void setContact_transitionIncludesMissingLastUpdated_success() throws Exception {
+        runAndWait(() -> {
+            ContactDetailPanel panel = new ContactDetailPanel();
+            Contact fullContact = new ContactBuilder()
+                    .withName("Full")
+                    .withPhone("12345678")
+                    .withEmail("full@test.com")
+                    .withAddress("Full Address")
+                    .withLastContacted("22/02/26")
+                    .withTags("tag1")
+                    .withNotes("Full notes")
+                    .build();
+            Contact noLastUpdatedContact = new ContactBuilder()
+                    .withName("No Last Updated")
+                    .withLastUpdated(null)
+                    .build();
+            Contact minimalContact = new ContactBuilder()
+                    .withName("Minimal")
+                    .build();
+
+            assertDoesNotThrow(() -> {
+                panel.setContact(fullContact);
+                panel.setContact(noLastUpdatedContact);
+                panel.setContact(minimalContact);
+            });
+        });
+    }
 }

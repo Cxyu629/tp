@@ -234,4 +234,32 @@ public class JsonAdaptedContactTest {
                         VALID_LAST_CONTACTED, Optional.of(" "), VALID_NOTES, VALID_TAGS);
         assertThrows(IllegalValueException.class, LastUpdated.MESSAGE_CONSTRAINTS, contact::toModelType);
     }
+
+    @Test
+    public void toModelType_legacyConstructorWithoutLastUpdated_populatesLastUpdated() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        VALID_LAST_CONTACTED, VALID_NOTES, VALID_TAGS);
+        assertEquals(BENSON, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_nullLastUpdated_populatesLastUpdated() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        VALID_LAST_CONTACTED, null, VALID_NOTES, VALID_TAGS);
+        assertEquals(BENSON, contact.toModelType());
+    }
+
+    @Test
+    public void toModelType_unsupportedNotesShape_returnsEmptyNotes() throws Exception {
+        JsonAdaptedContact contact =
+                new JsonAdaptedContact(
+                        VALID_ID, VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        VALID_LAST_CONTACTED, VALID_LAST_UPDATED, new Object(), VALID_TAGS);
+        Contact expectedContact = new ContactBuilder(BENSON).withNotes().build();
+        assertEquals(expectedContact, contact.toModelType());
+    }
 }

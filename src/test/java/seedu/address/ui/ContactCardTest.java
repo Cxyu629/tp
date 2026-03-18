@@ -125,6 +125,20 @@ public class ContactCardTest extends GuiUnitTest {
         });
     }
 
+    @Test
+    public void constructor_lastUpdatedAbsent_hidesLastUpdatedLabel() throws Exception {
+        runAndWait(() -> {
+            ContactCard card = new ContactCard(new ContactBuilder()
+                    .withName("No Last Updated")
+                    .withLastUpdated(null)
+                    .build(), 4);
+
+            Label lastUpdated = getPrivateField(card, "lastUpdated", Label.class);
+            assertEquals("", lastUpdated.getText());
+            assertFalse(lastUpdated.isVisible() || lastUpdated.isManaged());
+        });
+    }
+
     private static <T> T getPrivateField(ContactCard card, String fieldName, Class<T> fieldType) {
         try {
             Field field = ContactCard.class.getDeclaredField(fieldName);
