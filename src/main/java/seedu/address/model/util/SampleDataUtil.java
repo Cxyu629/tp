@@ -15,6 +15,7 @@ import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Note;
 import seedu.address.model.contact.Phone;
+import seedu.address.model.tag.RankedTag;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -71,7 +72,9 @@ public class SampleDataUtil {
      */
     public static Set<Tag> getTagSet(String... strings) {
         return Arrays.stream(strings)
-                .map(Tag::new)
+                .map((String s) -> s.contains(":")
+                    ? new RankedTag(s.split(":")[0], s.split(":")[1])
+                    : new Tag(s))
                 .collect(Collectors.toSet());
     }
 
