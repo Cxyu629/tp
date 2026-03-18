@@ -104,6 +104,27 @@ public class LogicManagerTest {
     }
 
     @Test
+    public void execute_undoOverwrite_test() throws Exception {
+        Contact contact = new ContactBuilder().build();
+        String validCommand = ContactUtil.getAddCommand(contact);
+        String expectedMessage = String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(contact));
+        assertCommandSuccess(validCommand, expectedMessage, model);
+
+        Contact contact2 = new ContactBuilder().withName("Second Name").build();
+        String validCommand2 = ContactUtil.getAddCommand(contact2);
+        String expectedMessage2 = String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(contact2));
+        assertCommandSuccess(validCommand2, expectedMessage2, model);
+
+        String undoCommand = UndoCommand.COMMAND_WORD;
+        assertCommandSuccess(undoCommand, String.format(UndoCommand.MESSAGE_UNDO_SUCCESS, expectedMessage2), model);
+        assertCommandSuccess(undoCommand, String.format(UndoCommand.MESSAGE_UNDO_SUCCESS, expectedMessage), model);
+
+        assertCommandSuccess(validCommand2, expectedMessage2, model);
+        String redoCommand = RedoCommand.COMMAND_WORD;
+        assertCommandSuccess(redoCommand, ModelManager.REDO_LIMIT_MESSAGE, model);
+    }
+
+    @Test
     public void execute_redoCommand_hitLimit() throws Exception {
         String redoCommand = RedoCommand.COMMAND_WORD;
         assertCommandSuccess(redoCommand, ModelManager.REDO_LIMIT_MESSAGE, model);
