@@ -107,6 +107,21 @@ public class ContactDetailPanelTest extends GuiUnitTest {
     }
 
     @Test
+    public void setContact_contactWithOnlyLastUpdated_success() throws Exception {
+        runAndWait(() -> {
+            ContactDetailPanel panel = new ContactDetailPanel();
+            Contact lastUpdatedOnlyContact = new ContactBuilder()
+                    .withName("Last Updated Only")
+                    .withPhone(null)
+                    .withEmail(null)
+                    .withAddress(null)
+                    .withLastContacted(null)
+                    .build();
+            assertDoesNotThrow(() -> panel.setContact(lastUpdatedOnlyContact));
+        });
+    }
+
+    @Test
     public void setContact_contactWithOnlyTags_success() throws Exception {
         runAndWait(() -> {
             ContactDetailPanel panel = new ContactDetailPanel();

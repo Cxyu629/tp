@@ -42,6 +42,8 @@ public class ContactCard extends UiPart<Region> {
     @FXML
     private Label lastContacted;
     @FXML
+    private Label lastUpdated;
+    @FXML
     private VBox notesContainer;
     @FXML
     private FlowPane tags;
@@ -90,6 +92,15 @@ public class ContactCard extends UiPart<Region> {
             this.lastContacted.setText("");
             this.lastContacted.setVisible(false);
             this.lastContacted.setManaged(false);
+        });
+        contact.getLastUpdated().ifPresentOrElse(lastUpdated -> {
+            this.lastUpdated.setText("Last Updated: " + lastUpdated);
+            this.lastUpdated.setVisible(true);
+            this.lastUpdated.setManaged(true);
+        }, () -> {
+            this.lastUpdated.setText("");
+            this.lastUpdated.setVisible(false);
+            this.lastUpdated.setManaged(false);
         });
         if (!(contact.getNotes().isEmpty())) {
             contact.getNotes().forEach(
