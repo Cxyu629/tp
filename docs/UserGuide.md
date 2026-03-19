@@ -33,6 +33,10 @@ Business to Business for You (B2B4U) is a **desktop app for managing contacts, o
 
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
+   * `view 1` : Opens the detail panel for the 1st contact.
+
+   * `close view` : Closes the contact detail panel.
+
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
@@ -80,16 +84,19 @@ Format: `help`
 
 Adds a contact to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A contact can have any number of tags (including 0)
+**Tip:** A contact can have any number of tags (including 0). At least one of `p/PHONE_NUMBER` or `e/EMAIL` must be provided.
 </box>
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Alex Tan p/91234567`
+
+![add contact](images/addContact.png)
 
 ### Listing all contacts : `list`
 
@@ -97,15 +104,37 @@ Shows a list of all contacts in the address book.
 
 Format: `list`
 
+![list contacts](images/listContacts.png)
+
 ### Viewing a specific contact : `view`
 
-Displays a specific contact in a separate panel.
+Displays a specific contact's full details in a side panel.
 
 Format: `view INDEX`
 
 * Displays the contact at the specified `INDEX` in a separate panel.
 * The index refers to the index number shown in the displayed contact list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* If the viewed contact is subsequently edited (e.g. via `edit` or `note`), the detail panel updates automatically to reflect the changes.
+
+Example:
+* `view 1` displays the details of the 1st contact.
+
+![view contact](images/viewContact.png)
+
+### Closing the contact detail panel : `close view`
+
+Closes the currently open contact detail panel and returns to the main list view.
+
+Format: `close view`
+
+* Does not require any index or additional parameters.
+* If no contact panel is currently open, the command still executes without error.
+
+Example:
+* `close view`
+
+![close view](images/closeView.png)
 
 ### Editing a contact : `edit`
 
@@ -124,35 +153,70 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 
+![edit contact](images/editContact.png)
+
 ### Adding notes/reminders to a contact : `note`
 
-Adds notes to an existing contact in the address book.
+Manages notes and reminders for an existing contact in the address book.
 
-Format: `note INDEX APPENDED_LINE [on/TIME]`
+**Add a note:**
 
-* Adds `APPENDED_LINE` to the contact at the specified `INDEX`.
-* The index refers to the index number shown in the displayed contact list.
-* The index **must be a positive integer** 1, 2, 3, …​
-* `TIME` can accept most conventional formats, and may omit year. If unable to parse as a date, will be saved as a string instead.
-* Filling the `TIME` field will turn the note into a reminder. The system will warn of reminders due within 1 week.
+Format: `note INDEX NOTE [on/TIME]`
 
-### Locating contacts by name: `find`
-
-Finds contacts whose names contain any of the given keywords.
-
-Format: `find [KEYWORD] [F/FIELD_SEARCH_PHRASE]`
-
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Contacts that contain all keywords (as a part of a word or in full) in any of its fields (including note field) will be included in the search results.
-* `F` can be any valid parameter prefix (`n`, `p`, `e`, `a`, `t`) and be repeated.
-* Contacts that contain `FIELD_SEARCH_PHRASE` (as a part or in full) in the field specified by `F\` will be included in the search results.
-* Contacts that contain all of `KEYWORD` and matches all `F/FIELD_SEARCH_PHRASE` filters will be returned (i.e. `OR` search).
+* Appends `NOTE` to the contact at the specified `INDEX`. The index **must be a positive integer** 1, 2, 3, …​
+* New notes are stacked underneath existing ones.
+* `TIME` can accept most conventional date/time formats and may omit the year. If unable to parse as a date, it will be saved as a plain string.
+* Filling the `on/TIME` field turns the note into a reminder. The system will warn of reminders due within 1 week.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `note 1 Likes to swim.`
+* `note 2 Follow up call on/15 Apr`
+
+![add note](images/addNote.png)
+
+**Remove the first N notes:**
+
+Format: `note INDEX c/LINES_TO_REMOVE`
+
+* Removes the first `LINES_TO_REMOVE` notes from the contact at the specified `INDEX`.
+* `LINES_TO_REMOVE` must be a non-negative integer.
+* If `LINES_TO_REMOVE` exceeds the number of existing notes, all notes are removed.
+
+Examples:
+* `note 1 c/1` removes the first note from the 1st contact.
+* `note 2 c/3` removes the first 3 notes from the 2nd contact.
+
+![remove note](images/removeNote.png)
+
+**Clear all notes:**
+
+Format: `note INDEX ca/`
+
+* Removes all notes from the contact at the specified `INDEX`.
+
+Example:
+* `note 1 ca/`
+
+### Finding contacts: `find`
+
+Finds contacts whose fields match the specified search criteria.
+
+Format: `find [KEYWORD]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…`
+
+* The search is case-insensitive. e.g. `hans` will match `Hans`.
+* Unprefixed `KEYWORD`s search across all fields (name, phone, email, address, notes, tags) using partial matching. Each keyword must appear somewhere in the contact.
+* Prefixed searches (`n/`, `p/`, `e/`, `a/`) filter by the specified field using partial matching.
+* `t/TAG` filters by tag using **exact** matching (e.g. `t/friend` will not match a tag named `friends`).
+* All search conditions are combined with **AND** logic — only contacts satisfying **every** condition are returned.
+* At least one search condition must be provided.
+
+Examples:
+* `find John` returns contacts containing `john` in any field.
+* `find n/Alex` returns contacts with `Alex` in their name.
+* `find p/94` returns contacts with `94` in their phone number.
+* `find a/street t/friends` returns contacts that have `street` in their address **and** the exact tag `friends`.
+
+![find contacts](images/findContacts.png)
 
 ### Deleting a contact : `delete`
 
@@ -167,6 +231,8 @@ Format: `delete INDEX`
 Examples:
 * `list` followed by `delete 2` deletes the 2nd contact in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+
+![delete contact](images/deleteContact.png)
 
 ### Clearing all entries : `clear`
 
@@ -217,14 +283,17 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Note**   | `note INDEX APPENDED_LINE` <br> e.g., `note 1 To meet in February`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List**   | `list` <br> e.g., `view 5`
-**View**   | `view INDEX`
-**Help**   | `help`
+Action            | Format, Examples
+------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Add**           | `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Clear**         | `clear`
+**Close View**    | `close view`
+**Delete**        | `delete INDEX`<br> e.g., `delete 3`
+**Edit**          | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Note (add)**    | `note INDEX NOTE [on/TIME]` <br> e.g., `note 1 To meet in February on/15 Apr`
+**Note (remove)** | `note INDEX c/LINES_TO_REMOVE` <br> e.g., `note 1 c/2`
+**Note (clear)**  | `note INDEX ca/` <br> e.g., `note 1 ca/`
+**Find**          | `find [KEYWORD]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…`<br> e.g., `find n/James t/friends`
+**List**          | `list`
+**View**          | `view INDEX` <br> e.g., `view 1`
+**Help**          | `help`
