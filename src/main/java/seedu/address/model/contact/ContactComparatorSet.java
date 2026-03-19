@@ -1,20 +1,21 @@
 package seedu.address.model.contact;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Comparator for sorting contacts based on specified field and order.
  */
 public final class ContactComparatorSet implements Comparator<Contact> {
 
-    private final ArrayList<Comparator<Contact>> comparators;
+    private final Set<Comparator<Contact>> comparators;
 
     /**
      * Constructs an empty combined {@code Comparator<Contact>}.
      */
     public ContactComparatorSet() {
-        this.comparators = new ArrayList<>();
+        this.comparators = new HashSet<>();
     }
 
     @Override

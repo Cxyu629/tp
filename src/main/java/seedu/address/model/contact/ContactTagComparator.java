@@ -58,6 +58,11 @@ public final class ContactTagComparator implements Comparator<Contact> {
             * (order == ContactComparator.Order.ASCENDING ? 1 : -1);
     }
 
+    @Override
+    public int hashCode() {
+        return ("t/" + tag).hashCode();
+    }
+
     /**
      * Extract a specific {@code RankedTag} from a {@code Contact}.
      * @param contact The contact with the tag.
