@@ -203,7 +203,7 @@ public class Contact {
             return true;
         }
         return tags.stream().anyMatch(
-                tag -> tag.tagName.toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)));
+                tag -> tag.name.toLowerCase(Locale.ROOT).contains(string.toLowerCase(Locale.ROOT)));
     }
 
     /**
@@ -213,7 +213,7 @@ public class Contact {
      */
     public boolean hasTag(String string) {
         return tags.stream().anyMatch(
-                tag -> tag.tagName.toLowerCase(Locale.ROOT).equals(string.toLowerCase(Locale.ROOT)));
+                tag -> tag.name.toLowerCase(Locale.ROOT).equals(string.toLowerCase(Locale.ROOT)));
     }
 
     /**

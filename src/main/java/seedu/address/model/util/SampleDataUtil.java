@@ -15,6 +15,7 @@ import seedu.address.model.contact.Email;
 import seedu.address.model.contact.Name;
 import seedu.address.model.contact.Note;
 import seedu.address.model.contact.Phone;
+import seedu.address.model.tag.RankedTag;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -30,7 +31,7 @@ public class SampleDataUtil {
                 Optional.of(new Address("Blk 30 Geylang Street 29, #06-40")),
                 Optional.empty(),
                 EMPTY_NOTES,
-                getTagSet("friends")),
+                getTagSet("friends:best")),
             new Contact(new Name("Bernice Yu"), Optional.of(new Phone("99272758")),
                 Optional.of(new Email("berniceyu@example.com")),
                 Optional.of(new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18")),
@@ -77,7 +78,9 @@ public class SampleDataUtil {
      */
     public static Set<Tag> getTagSet(String... strings) {
         return Arrays.stream(strings)
-                .map(Tag::new)
+                .map((String s) -> s.contains(":")
+                    ? new RankedTag(s.split(":")[0], s.split(":")[1])
+                    : new Tag(s))
                 .collect(Collectors.toSet());
     }
 
