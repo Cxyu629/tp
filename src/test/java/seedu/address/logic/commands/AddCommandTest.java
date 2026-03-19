@@ -240,6 +240,10 @@ public class AddCommandTest {
         @Override
         public void filterDisplayedContactList(Predicate<Contact> predicate) {
         }
+
+        @Override
+        public void resetDisplayedContactList() {
+        }
     }
 
 }
