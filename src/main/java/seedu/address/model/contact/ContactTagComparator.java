@@ -38,7 +38,7 @@ public final class ContactTagComparator implements Comparator<Contact> {
      */
     private static Optional<RankedTag> extractRankedTag(Contact contact, String tagName) {
         return contact.getTags().stream()
-            .filter(tag -> !tag.name.isEmpty() && tag.name.equals(tagName) && tag instanceof RankedTag)
+            .filter(tag -> tag.name.equals(tagName) && tag instanceof RankedTag)
             .map(tag -> (RankedTag) tag)
             .findFirst();
     }

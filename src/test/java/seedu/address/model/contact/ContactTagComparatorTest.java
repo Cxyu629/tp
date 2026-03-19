@@ -41,20 +41,36 @@ public class ContactTagComparatorTest {
     }
 
     @Test
-    public void compare_noTag_returnsPositive() {
+    public void compare_noTag_isCorrect() {
         assertTrue(COMPARATOR.compare(JOHN, JANE) > 0);
+        assertTrue(COMPARATOR.compare(JANE, JOHN) < 0);
+
         assertTrue(COMPARATOR.compare(JOHN, TOM) > 0);
+        assertTrue(COMPARATOR.compare(TOM, JOHN) < 0);
+
         assertTrue(COMPARATOR.compare(JOHN, MAX) > 0);
+        assertTrue(COMPARATOR.compare(MAX, JOHN) < 0);
     }
 
     @Test
-    public void compare_noRank_returnsPositive() {
+    public void compare_noRank_isCorrect() {
         assertTrue(COMPARATOR.compare(JANE, TOM) > 0);
+        assertTrue(COMPARATOR.compare(TOM, JANE) < 0);
+
         assertTrue(COMPARATOR.compare(JANE, MAX) > 0);
+        assertTrue(COMPARATOR.compare(MAX, JANE) < 0);
     }
 
     @Test
     public void compare_lessRank_returnsPositive() {
         assertTrue(COMPARATOR.compare(TOM, MAX) > 0);
+        assertTrue(COMPARATOR.compare(MAX, TOM) < 0);
+    }
+
+    @Test
+    public void hashCode_sameTag_returnsSameHashCode() {
+        ContactTagComparator comparator1 = new ContactTagComparator("friends", ContactComparator.Order.ASCENDING);
+        ContactTagComparator comparator2 = new ContactTagComparator("friends", ContactComparator.Order.DESCENDING);
+        assertEquals(comparator1.hashCode(), comparator2.hashCode());
     }
 }
