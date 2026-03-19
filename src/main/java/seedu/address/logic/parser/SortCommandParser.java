@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LAST_UPDATED;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -29,7 +30,8 @@ public class SortCommandParser implements Parser<SortCommand> {
         PREFIX_NAME, ContactComparator.Field.NAME,
         PREFIX_PHONE, ContactComparator.Field.PHONE,
         PREFIX_EMAIL, ContactComparator.Field.EMAIL,
-        PREFIX_ADDRESS, ContactComparator.Field.ADDRESS
+        PREFIX_ADDRESS, ContactComparator.Field.ADDRESS,
+        PREFIX_LAST_UPDATED, ContactComparator.Field.LAST_UPDATED
     );
 
     /**
@@ -41,7 +43,7 @@ public class SortCommandParser implements Parser<SortCommand> {
     private static Comparator<Contact> makeCombinedComparator(ArgumentMultimap argMultimap) throws ParseException {
         ContactComparatorSet combinedComparator = new ContactComparatorSet();
 
-        for (Prefix prefix : new Prefix[] {PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS}) {
+        for (Prefix prefix : PREFIX_FIELD_MAP.keySet()) {
             Optional<String> values = argMultimap.getValue(prefix);
 
             if (values.isEmpty()) {
@@ -62,7 +64,7 @@ public class SortCommandParser implements Parser<SortCommand> {
             for (String value : values) {
                 combinedComparator.addComparator(new ContactTagComparator(
                     value,
-                    ContactComparator.Order.ASCENDING // TODO: Decide on format for specifying order for tag sorting
+                    ContactComparator.Order.DESCENDING // TODO: Decide on format for specifying order for tag sorting
                 ));
             }
         }
@@ -91,7 +93,7 @@ public class SortCommandParser implements Parser<SortCommand> {
         }
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-            PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
+            PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_LAST_UPDATED, PREFIX_TAG);
 
         Comparator<Contact> combinedComparator = makeCombinedComparator(argMultimap);
 

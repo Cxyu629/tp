@@ -51,7 +51,7 @@ public final class ContactTagComparator implements Comparator<Contact> {
 
         // Either does not have the Tag
         if (!o1.hasTag(tag) || !o2.hasTag(tag)) {
-            return o1.hasTag(tag) ? 1 : -1;
+            return o1.hasTag(tag) ^ order == ContactComparator.Order.ASCENDING ? -1 : 1;
         }
 
         Optional<RankedTag> rankedTag1 = extractRankedTag(o1, tag);
@@ -64,12 +64,11 @@ public final class ContactTagComparator implements Comparator<Contact> {
 
         // Only one of the two has a RankedTag
         if (rankedTag1.isEmpty() || rankedTag2.isEmpty()) {
-            return rankedTag1.isPresent() ? 1 : -1;
+            return rankedTag1.isPresent() ^ order == ContactComparator.Order.ASCENDING ? -1 : 1;
         }
 
         // Both have RankedTags
-        return rankedTag1.get().rank.compareTo(rankedTag2.get().rank)
-            * (order == ContactComparator.Order.ASCENDING ? 1 : -1);
+        return rankedTag2.get().rank.compareTo(rankedTag1.get().rank);
     }
 
     @Override
