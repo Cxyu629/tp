@@ -84,17 +84,23 @@ Format: `help`
 
 Adds a contact to the address book.
 
-Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [lc/LAST_CONTACTED] [t/TAG]…​`
 
 <box type="tip" seamless>
 
 **Tip:** A contact can have any number of tags (including 0). At least one of `p/PHONE_NUMBER` or `e/EMAIL` must be provided.
 </box>
 
+* Names are standardised to Title Case (e.g. `john doe` becomes `John Doe`).
+* Phone numbers accept digits, spaces, and `+`. Numbers starting with `+` (country code) must be 8–15 digits; otherwise 5–14 digits.
+* Tags accept alphanumeric strings in the format `TAG` or `TAG:RANK` (e.g. `friend`, `client:vip`).
+* `LAST_CONTACTED` accepts most conventional date/time formats (e.g. `22/02/2026`, `15 Apr`, `today`).
+
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 * `add n/Alex Tan p/91234567`
+* `add n/Jane Smith e/jane@example.com lc/22/02/2026`
 
 ![add contact](images/addContact.png)
 
@@ -140,18 +146,19 @@ Example:
 
 Edits an existing contact in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [lc/LAST_CONTACTED] [t/TAG]…​`
 
 * Edits the contact at the specified `INDEX`. The index refers to the index number shown in the displayed contact list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the contact will be removed i.e adding of tags is not cumulative.
-* You can remove all the contact’s tags by typing `t/` without
+* You can remove all the contact's tags by typing `t/` without
     specifying any tags after it.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
+*  `edit 3 lc/today` Updates the last contacted date of the 3rd contact to today.
 
 ![edit contact](images/editContact.png)
 
@@ -234,11 +241,61 @@ Examples:
 
 ![delete contact](images/deleteContact.png)
 
+### Undoing a command : `undo`
+
+Reverts the last executed command that modified data.
+
+Format: `undo`
+
+* Only commands that modify data can be undone (e.g. `add`, `edit`, `delete`, `note`, `clear`, `sort`).
+* Commands that do not modify data (`help`, `view`, `close view`, `list`, `find`, `undo`, `redo`, `exit`) are ignored by undo.
+* Displays the feedback of the undone command.
+
+Examples:
+* `delete 1` followed by `undo` restores the deleted contact.
+* `edit 1 n/New Name` followed by `undo` reverts the name change.
+
+![undo command](images/undoCommand.png)
+
+### Redoing a command : `redo`
+
+Reverses the effect of an `undo` command, effectively re-applying the previously undone action.
+
+Format: `redo`
+
+* Only applicable after an `undo` command has been executed.
+* Commands that do not modify data (`help`, `view`, `close view`, `list`, `find`, `undo`, `redo`, `exit`) are ignored by redo.
+* Displays the feedback of the redone command.
+
+Examples:
+* `delete 1` then `undo` then `redo` re-deletes the 1st contact.
+* `edit 1 n/New Name` then `undo` then `redo` re-applies the name change.
+
+![redo command](images/redoCommand.png)
+
+### Sorting contacts : `sort`
+
+Sorts the currently displayed contacts by the specified field(s).
+
+Format: `sort [n/] [p/] [e/] [a/] [lu/] [lc/] [t/TAG_NAME]…`
+
+* Sorts by the fields indicated by each prefix, in the order the prefixes are given.
+* `n/` — sort by name, `p/` — sort by phone, `e/` — sort by email, `a/` — sort by address, `lu/` — sort by last updated, `lc/` — sort by last contacted.
+* `t/TAG_NAME` — contacts with the ranked tag `TAG_NAME` are displayed at the top.
+* At least one sort criterion must be provided.
+
+Examples:
+* `sort n/` sorts all contacts alphabetically by name.
+* `sort lu/` sorts contacts by when they were last updated.
+* `sort n/ t/vip` sorts contacts alphabetically by name, with contacts tagged `vip` shown first.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
 
 Format: `clear`
+
+![clear](images/clear.png)
 
 ### Exiting the program : `exit`
 
@@ -285,15 +342,18 @@ _Details coming soon ..._
 
 Action            | Format, Examples
 ------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**           | `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**           | `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [lc/LAST_CONTACTED] [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**         | `clear`
 **Close View**    | `close view`
 **Delete**        | `delete INDEX`<br> e.g., `delete 3`
-**Edit**          | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Edit**          | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [lc/LAST_CONTACTED] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Note (add)**    | `note INDEX NOTE [on/TIME]` <br> e.g., `note 1 To meet in February on/15 Apr`
 **Note (remove)** | `note INDEX c/LINES_TO_REMOVE` <br> e.g., `note 1 c/2`
 **Note (clear)**  | `note INDEX ca/` <br> e.g., `note 1 ca/`
 **Find**          | `find [KEYWORD]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…`<br> e.g., `find n/James t/friends`
 **List**          | `list`
+**Redo**          | `redo`
+**Sort**          | `sort [n/] [p/] [e/] [a/] [lu/] [lc/] [t/TAG_NAME]…` <br> e.g., `sort n/`
+**Undo**          | `undo`
 **View**          | `view INDEX` <br> e.g., `view 1`
 **Help**          | `help`
