@@ -7,6 +7,7 @@ import static seedu.address.testutil.TypicalContacts.ALICE;
 import static seedu.address.testutil.TypicalContacts.getTypicalAddressBook;
 
 import java.util.Comparator;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
