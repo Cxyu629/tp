@@ -109,7 +109,7 @@ Examples:
 
 ### Listing all contacts: `list`
 
-Shows a list of all contacts in the address book.
+Shows a list of all contacts in the address book and resets contact order by oldest contact first.
 
 Format: `list`
 
@@ -286,6 +286,8 @@ Format: `sort [n/] [p/] [e/] [a/] [lu/] [lc/] [t/TAG_NAME]…`
 * `n/` — sort by name, `p/` — sort by phone, `e/` — sort by email, `a/` — sort by address, `lu/` — sort by last updated, `lc/` — sort by last contacted.
 * `t/TAG_NAME` — contacts with the ranked tag `TAG_NAME` are displayed at the top.
 * At least one sort criterion must be provided.
+* Sort criterions from separate `sort` commands can stack.
+* Older sort criterion given priority in sorting.
 
 Examples:
 * `sort n/` sorts all contacts alphabetically by name.
