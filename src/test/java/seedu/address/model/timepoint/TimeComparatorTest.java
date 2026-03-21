@@ -23,6 +23,9 @@ public class TimeComparatorTest {
         timePointList.sort(comparator);
         List<TimePoint> expectedList = Arrays.asList(DATE, STRING);
         assertEquals(expectedList, timePointList);
+        List<TimePoint> timePointList2 = Arrays.asList(DATE, STRING);
+        timePointList2.sort(comparator);
+        assertEquals(expectedList, timePointList2);
     }
 
     @Test
@@ -33,6 +36,9 @@ public class TimeComparatorTest {
         timePointList.sort(comparator);
         List<TimePoint> expectedList = Arrays.asList(DATE, DATETIME);
         assertEquals(expectedList, timePointList);
+        List<TimePoint> timePointList2 = Arrays.asList(DATE, DATETIME);
+        timePointList2.sort(comparator);
+        assertEquals(expectedList, timePointList2);
     }
 
     private static class NeutralComparator implements Comparator<TimePoint> {
