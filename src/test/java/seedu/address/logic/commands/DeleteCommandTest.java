@@ -129,12 +129,12 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_CONTACT);
         deleteCommand.execute(model);
 
-        // Contact 2's note should now have @[name] instead of @{UUID}
+        // Contact 2's note should now have the plain name instead of @{UUID}
         Contact updatedContact2 = model.getAddressBook().getContactList().stream()
                 .filter(c -> c.getId().equals(contact2.getId()))
                 .findFirst()
                 .orElseThrow();
-        String expectedNoteText = "worked with @[" + contact1.getName().fullName + "]";
+        String expectedNoteText = "worked with " + contact1.getName().fullName;
         assertEquals(expectedNoteText, updatedContact2.getNotes().get(0).value);
     }
 

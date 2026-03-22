@@ -96,11 +96,11 @@ public class NoteLabel extends HBox {
 
     /**
      * Builds a {@code TextFlow} from note text, resolving {@code @{UUID}} references
-     * to contact names and rendering {@code @[name]} dereferenced names with styling.
+     * to bold/underlined contact names.
      */
     private TextFlow buildRichNoteText(String noteText, ObservableList<Contact> contacts) {
         TextFlow textFlow = new TextFlow();
-        Matcher matcher = Note.ANY_REF_PATTERN.matcher(noteText);
+        Matcher matcher = Note.CONTACT_REF_PATTERN.matcher(noteText);
         int lastEnd = 0;
 
         while (matcher.find()) {
@@ -112,19 +112,14 @@ public class NoteLabel extends HBox {
                 textFlow.getChildren().add(plainText);
             }
 
-            String displayName;
-            if (matcher.group(1) != null) {
-                // Active UUID reference - resolve to contact name
-                UUID refId = UUID.fromString(matcher.group(1));
-                displayName = contacts.stream()
-                        .filter(c -> c.getId().equals(refId))
-                        .map(c -> c.getName().fullName)
-                        .findFirst()
-                        .orElse("@" + matcher.group(1));
-            } else {
-                // Dereferenced name reference
-                displayName = matcher.group(2);
-            }
+            // Resolve UUID to contact name
+            String uuidStr = matcher.group(1);
+            UUID refId = UUID.fromString(uuidStr);
+            String displayName = contacts.stream()
+                    .filter(c -> c.getId().equals(refId))
+                    .map(c -> c.getName().fullName)
+                    .findFirst()
+                    .orElse("@" + uuidStr);
 
             Text refText = new Text(displayName);
             refText.getStyleClass().add("contact-reference");
