@@ -27,6 +27,14 @@ public class Note {
     public static final Pattern CONTACT_REF_PATTERN =
             Pattern.compile("@\\{([0-9a-fA-F\\-]{36})\\}");
 
+    /** Regex pattern matching dereferenced contact names stored as @[name] in note text. */
+    public static final Pattern DEREF_REF_PATTERN =
+            Pattern.compile("@\\[([^\\]]+)\\]");
+
+    /** Combined pattern matching both active and dereferenced contact references for rendering. */
+    public static final Pattern ANY_REF_PATTERN =
+            Pattern.compile("@\\{([0-9a-fA-F\\-]{36})\\}|@\\[([^\\]]+)\\]");
+
     /** Regex pattern matching user-typed @INDEX references in note text. */
     public static final Pattern CONTACT_INDEX_PATTERN =
             Pattern.compile("@(\\d+)");
@@ -95,18 +103,19 @@ public class Note {
     }
 
     /**
-     * Returns true if this note contains any contact references ({@code @{UUID}}).
+     * Returns true if this note contains any contact references
+     * ({@code @{UUID}} or dereferenced {@code @[name]}).
      */
     public boolean hasContactReferences() {
-        return CONTACT_REF_PATTERN.matcher(value).find();
+        return ANY_REF_PATTERN.matcher(value).find();
     }
 
     /**
-     * Returns a new Note with the given UUID reference replaced by the plain text name.
-     * Used when a referenced contact is deleted.
+     * Returns a new Note with the given UUID reference replaced by {@code @[name]}.
+     * The {@code @[name]} format preserves styling in the UI after the contact is deleted.
      */
     public Note dereferenceContact(UUID contactId, String contactName) {
-        String newValue = value.replace("@{" + contactId.toString() + "}", contactName);
+        String newValue = value.replace("@{" + contactId.toString() + "}", "@[" + contactName + "]");
         return new Note(newValue, timePoint);
     }
 

@@ -30,25 +30,25 @@ import seedu.address.model.contact.Contact;
 import seedu.address.testutil.ContactBuilder;
 
 /**
- * Contains integration tests (interaction with the Model) for {@code FindCommand}.
+ * Contains integration tests (interaction with the Model) for {@code FindCommand} subclasses.
  */
 public class FindCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void equals() {
+    public void equals_findFieldsCommand() {
         Predicate<Contact> firstPredicate = (Contact contact) -> contact.contains("first");
         Predicate<Contact> secondPredicate = (Contact contact) -> contact.contains("second");
 
-        FindCommand findFirstCommand = new FindCommand(firstPredicate);
-        FindCommand findSecondCommand = new FindCommand(secondPredicate);
+        FindFieldsCommand findFirstCommand = new FindFieldsCommand(firstPredicate);
+        FindFieldsCommand findSecondCommand = new FindFieldsCommand(secondPredicate);
 
         // same object -> returns true
         assertTrue(findFirstCommand.equals(findFirstCommand));
 
         // same values -> returns true
-        FindCommand findFirstCommandCopy = new FindCommand(firstPredicate);
+        FindFieldsCommand findFirstCommandCopy = new FindFieldsCommand(firstPredicate);
         assertTrue(findFirstCommand.equals(findFirstCommandCopy));
 
         // different types -> returns false
@@ -57,7 +57,7 @@ public class FindCommandTest {
         // null -> returns false
         assertFalse(findFirstCommand.equals(null));
 
-        // different contact -> returns false
+        // different predicate -> returns false
         assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
@@ -65,7 +65,7 @@ public class FindCommandTest {
     public void execute_singleContactFound() {
         String expectedMessage = String.format(MESSAGE_CONTACTS_LISTED_OVERVIEW, 1);
         Predicate<Contact> predicate = (Contact contact) -> contact.containsInName("Elle");
-        FindCommand command = new FindCommand(predicate);
+        FindFieldsCommand command = new FindFieldsCommand(predicate);
         expectedModel.filterDisplayedContactList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ELLE), model.getDisplayedContactList());
@@ -75,7 +75,7 @@ public class FindCommandTest {
     public void execute_multipleContactsFound() {
         String expectedMessage = String.format(MESSAGE_CONTACTS_LISTED_OVERVIEW, 4);
         Predicate<Contact> predicate = (Contact contact) -> contact.contains("ne");
-        FindCommand command = new FindCommand(predicate);
+        FindFieldsCommand command = new FindFieldsCommand(predicate);
         expectedModel.filterDisplayedContactList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(ALICE, BENSON, DANIEL, ELLE), model.getDisplayedContactList());
@@ -95,7 +95,7 @@ public class FindCommandTest {
         ab.addContact(second);
         Model testModel = new ModelManager(ab, new UserPrefs());
 
-        FindCommand command = new FindCommand(INDEX_FIRST_CONTACT);
+        FindAssociationsCommand command = new FindAssociationsCommand(INDEX_FIRST_CONTACT);
         CommandResult result = command.execute(testModel);
         assertTrue(result.getFeedbackToUser().contains("Cross-referencing"));
         // Should show both the target (Alice) and the referenced contact (Bob)
@@ -110,7 +110,7 @@ public class FindCommandTest {
         ab.addContact(noRefContact);
         Model testModel = new ModelManager(ab, new UserPrefs());
 
-        FindCommand command = new FindCommand(INDEX_FIRST_CONTACT);
+        FindAssociationsCommand command = new FindAssociationsCommand(INDEX_FIRST_CONTACT);
         CommandResult result = command.execute(testModel);
         assertTrue(result.getFeedbackToUser().contains("No contact references found in notes"));
     }
@@ -118,7 +118,7 @@ public class FindCommandTest {
     @Test
     public void execute_crossRefInvalidIndex_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getDisplayedContactList().size() + 1);
-        FindCommand command = new FindCommand(outOfBoundIndex);
+        FindAssociationsCommand command = new FindAssociationsCommand(outOfBoundIndex);
         try {
             command.execute(model);
             assertTrue(false, "Expected CommandException");
@@ -140,20 +140,29 @@ public class FindCommandTest {
         ab.addContact(otherContact);
         Model testModel = new ModelManager(ab, new UserPrefs());
 
-        FindCommand command = new FindCommand(INDEX_FIRST_CONTACT);
+        FindAssociationsCommand command = new FindAssociationsCommand(INDEX_FIRST_CONTACT);
         CommandResult result = command.execute(testModel);
         assertTrue(result.getFeedbackToUser().contains("No contact references found in notes"));
     }
 
     @Test
-    public void equals_crossRef() {
-        FindCommand findFirst = new FindCommand(INDEX_FIRST_CONTACT);
-        FindCommand findSecond = new FindCommand(INDEX_SECOND_CONTACT);
+    public void equals_findAssociationsCommand() {
+        FindAssociationsCommand findFirst = new FindAssociationsCommand(INDEX_FIRST_CONTACT);
+        FindAssociationsCommand findSecond = new FindAssociationsCommand(INDEX_SECOND_CONTACT);
 
         assertTrue(findFirst.equals(findFirst));
-        assertTrue(findFirst.equals(new FindCommand(INDEX_FIRST_CONTACT)));
+        assertTrue(findFirst.equals(new FindAssociationsCommand(INDEX_FIRST_CONTACT)));
         assertFalse(findFirst.equals(findSecond));
         assertFalse(findFirst.equals(null));
         assertFalse(findFirst.equals(1));
+    }
+
+    @Test
+    public void findCommand_isAbstract() {
+        // Both subclasses are instances of FindCommand
+        FindFieldsCommand fieldsCommand = new FindFieldsCommand(c -> true);
+        FindAssociationsCommand assocCommand = new FindAssociationsCommand(INDEX_FIRST_CONTACT);
+        assertTrue(fieldsCommand instanceof FindCommand);
+        assertTrue(assocCommand instanceof FindCommand);
     }
 }

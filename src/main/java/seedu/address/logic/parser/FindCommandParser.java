@@ -15,7 +15,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.FindAssociationsCommand;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.commands.FindFieldsCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.contact.ConjunctiveContactPredicateSet;
 import seedu.address.model.contact.Contact;
@@ -46,7 +48,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         if (associateMatcher.matches()) {
             try {
                 Index index = ParserUtil.parseIndex(associateMatcher.group(1));
-                return new FindCommand(index);
+                return new FindAssociationsCommand(index);
             } catch (ParseException pe) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE), pe);
@@ -61,7 +63,7 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ConjunctiveContactPredicateSet cumulativePredicate = makeCumulativePredicate(argMultimap);
 
-        return new FindCommand(cumulativePredicate);
+        return new FindFieldsCommand(cumulativePredicate);
     }
 
     /**

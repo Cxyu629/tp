@@ -25,6 +25,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.commands.FindAssociationsCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -129,7 +130,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_associateIndex_returnsFindCommand() throws ParseException {
         FindCommand command = parser.parse(" @1");
-        assertEquals(new FindCommand(TypicalIndexes.INDEX_FIRST_CONTACT), command);
+        assertEquals(new FindAssociationsCommand(TypicalIndexes.INDEX_FIRST_CONTACT), command);
     }
 
     @Test
